@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Manage Multiple Java environment</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Jenv: Efficiently Manage multiple java versions
+
+???
+
+Notes for the _first_ slide!
+
+---
+
+# Agenda
+
+1. Introduction
+2. Installation
+3. Configure
+4. How to use
+
+---
+
+# Introduction
+
+Preconditions to the Rescue
+Guava’s Preconditions offers the help we need here since its API provides sanity checks for a number of the common exceptional inputs that a client caller can provide. When the precondition is not met an Exception is thrown with an optional, printf-style message.
+
+Here are the methods that I tend to use the most along with the exception it throws:
+
+checkArgument(boolean) throws IllegalArgumentException
+
+checkNotNull(T) throws NullPointerException
+
+checkState(boolean) throws IllegalStateException
+<div class="content">
+<pre class="prettyprint linenums java language-java"><code>package guava.demo.preconditions;
+
+import java.util.List;
+
+public class School {
+    private final String name;
+    private final List&lt;String&gt; departments;
+
+    /**
+     * @param name The school name, not null or empty
+     * @param departments The list of departments at the school, not null or empty
+     */
+    public School(final String name, final List&lt;String&gt; departments) {
+        if( name == null ) {
+            throw new NullPointerException("Invalid name provided");
+        }
+
+        if( name.isEmpty() ) {
+            throw new IllegalArgumentException("The provided name cannot be empty");
+        }
+
+        if( departments == null ) {
+            throw new NullPointerException("Invalid department list provided");
+        }
+
+        if( departments.isEmpty() ) {
+            throw new IllegalArgumentException("The provided department list cannot be empty");
+        }
+
+        this.name = name;
+        this.departments = departments;
+    }
+}</code></pre>
+</div>
+
+---
+
+# Installation
+       Linux / OS X
+      $ git clone https://github.com/jenv/jenv.git ~/.jenv
+      
+       Mac OS X via Homebrew
+      $ brew install jenv
+
+---
+
+# Configure
+      $ jenv add /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+  oracle64-1.6.0.39 added
+      $ jenv add /Library/Java/JavaVirtualMachines/jdk17011.jdk/Contents/Home
+  oracle64-1.7.0.11 added
+
+---
+
+# How to use
+       List managed JDKs
+        $ jenv versions
+          system
+          oracle64-1.6.0.39
+          * oracle64-1.7.0.11 (set by /Users/Gaurav/.jenv/version)
+       Configure global version
+        $ jenv global oracle64-1.6.0.39
+       Configure local version (per directory)
+        $ jenv local oracle64-1.6.0.39
+       Configure shell instance version
+        $ jenv shell oracle64-1.6.0.39
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
